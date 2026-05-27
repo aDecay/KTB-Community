@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: community
+  jackson:
+    property-naming-strategy: SNAKE_CASE
