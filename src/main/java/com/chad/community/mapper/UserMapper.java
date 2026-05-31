@@ -17,7 +17,7 @@ public class UserMapper {
     }
 
     public static UserResponseDto mapUserToUserResponse(User user) {
-        return new UserResponseDto(user.getId(), user.getNickname(), user.getEmail());
+        return new UserResponseDto(user.getId(), user.getNickname(), user.getProfileImage());
     }
 
     public static UserExistenceResponseDto mapBooleanToUserDuplicationResponse(boolean exists) {
