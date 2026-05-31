@@ -50,6 +50,11 @@ public class UserService {
 
     public UserResponseDto getMyUser(int userId) {
         User user = userRepository.findUserById(userId);
+
+        if (user == null) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
         return UserMapper.mapUserToUserResponse(user);
     }
 
