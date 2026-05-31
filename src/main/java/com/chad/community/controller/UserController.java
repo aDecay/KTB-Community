@@ -1,10 +1,7 @@
 package com.chad.community.controller;
 
 import com.chad.community.annotation.AuthenticationParameter;
-import com.chad.community.dto.AuthenticationInfo;
-import com.chad.community.dto.UserExistenceResponseDto;
-import com.chad.community.dto.UserResponseDto;
-import com.chad.community.dto.UserRequestDto;
+import com.chad.community.dto.*;
 import com.chad.community.exceptions.CustomException;
 import com.chad.community.exceptions.ErrorCode;
 import com.chad.community.service.UserService;
@@ -45,6 +42,20 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(user, "user found successfully"));
+    }
+
+    @PatchMapping("/me")
+    public ResponseEntity<ApiResponse<UserResponseDto>> updateMyUser(
+            @AuthenticationParameter AuthenticationInfo authenticationInfo,
+            @RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        UserResponseDto user = userService.updateMyUser(authenticationInfo.userId(), userUpdateRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(user, "user updated successfully"));
     }
 
     @DeleteMapping("/me")
