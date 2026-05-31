@@ -33,7 +33,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         // userId를 AuthenticationContextHolder에 등록
         String token = authorization.substring(7);
         int userId = jwtUtil.getUserId(token);
-        AuthenticationContextHolder.setContext(userId);
+        AuthenticationContextHolder.setUserId(userId);
 
         return true;
     }
@@ -41,6 +41,6 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
         // controller 이후 초기화
-        AuthenticationContextHolder.clear();
+        AuthenticationContextHolder.clearUserId();
     }
 }
