@@ -1,5 +1,7 @@
 package com.chad.community.utils;
 
+import java.util.Optional;
+
 public class AuthenticationContextHolder {
     private static final ThreadLocal<Integer> context = new ThreadLocal<Integer>();
 
@@ -7,8 +9,8 @@ public class AuthenticationContextHolder {
 
     }
 
-    public static Integer getContext() {
-        return context.get();
+    public static Optional<Integer> getContext() {
+        return Optional.ofNullable(context.get());
     }
 
     public static void setContext(int userId) {
