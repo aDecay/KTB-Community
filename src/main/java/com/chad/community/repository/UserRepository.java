@@ -16,6 +16,16 @@ public class UserRepository {
         return user;
     }
 
+    public User findUserByEmailAndPassword(String email, String password) {
+        for (User user : userList) {
+            if (email.equals(user.getEmail()) && password.equals(user.getPassword())) {
+                return user;
+            }
+        }
+
+        return null;
+    }
+
     public boolean userEmailExists(String email) {
         for (User user : userList) {
             if (email.equals(user.getEmail())) {

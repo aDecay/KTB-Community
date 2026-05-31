@@ -43,4 +43,8 @@ public class UserService {
 
         return UserMapper.mapBooleanToUserDuplicationResponse(emailExists && nicknameExists);
     }
+
+    public User findUserByEmailAndPassword(String email, String password) {
+        return userRepository.findUserByEmailAndPassword(email, password);
+    }
 }
