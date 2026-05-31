@@ -1,5 +1,6 @@
 package com.chad.community.service;
 
+import com.chad.community.dto.UserExistenceResponseDto;
 import com.chad.community.dto.UserResponseDto;
 import com.chad.community.dto.UserRequestDto;
 import com.chad.community.entity.User;
@@ -30,5 +31,16 @@ public class UserService {
         User user = userRepository.saveUser(UserMapper.mapUserRequestToUser(userRequest));
 
         return UserMapper.mapUserToUserResponse(user);
+    }
+
+    public UserExistenceResponseDto checkExistence(String email, String nickname) {
+        if (email == null && nickname == null) {
+            throw new CustomException(ErrorCode.USER_INVALID_EXISTENCE_CHECK);
+        }
+
+        boolean emailExists = email == null || userRepository.userEmailExists(email);
+        boolean nicknameExists = nickname == null || userRepository.userNicknameExists(nickname);
+
+        return UserMapper.mapBooleanToUserDuplicationResponse(emailExists && nicknameExists);
     }
 }

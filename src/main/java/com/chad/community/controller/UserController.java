@@ -1,5 +1,6 @@
 package com.chad.community.controller;
 
+import com.chad.community.dto.UserExistenceResponseDto;
 import com.chad.community.dto.UserResponseDto;
 import com.chad.community.dto.UserRequestDto;
 import com.chad.community.service.UserService;
@@ -23,8 +24,10 @@ public class UserController {
                 .body(ApiResponse.success(user, "user created successfully"));
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<UserResponseDto> getMyUser() {
-        return null;
+    @GetMapping
+    public ResponseEntity<ApiResponse<UserExistenceResponseDto>> checkExistence(@RequestParam(required = false) String email, @RequestParam(required = false) String nickname) {
+        UserExistenceResponseDto userDuplication = userService.checkExistence(email, nickname);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(userDuplication, "user existence checked successfully"));
     }
 }
