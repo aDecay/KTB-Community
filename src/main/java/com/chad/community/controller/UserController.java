@@ -1,8 +1,12 @@
 package com.chad.community.controller;
 
+import com.chad.community.annotation.AuthenticationParameter;
+import com.chad.community.dto.AuthenticationInfo;
 import com.chad.community.dto.UserExistenceResponseDto;
 import com.chad.community.dto.UserResponseDto;
 import com.chad.community.dto.UserRequestDto;
+import com.chad.community.exceptions.CustomException;
+import com.chad.community.exceptions.ErrorCode;
 import com.chad.community.service.UserService;
 import com.chad.community.utils.ApiResponse;
 import jakarta.validation.Valid;
@@ -29,5 +33,17 @@ public class UserController {
         UserExistenceResponseDto userDuplication = userService.checkExistence(email, nickname);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(userDuplication, "user existence checked successfully"));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<UserResponseDto>> getMyUser(@AuthenticationParameter AuthenticationInfo authenticationInfo) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        UserResponseDto user = userService.getMyUser(authenticationInfo.userId());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(user, "user found successfully"));
     }
 }

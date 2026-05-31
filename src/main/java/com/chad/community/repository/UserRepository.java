@@ -1,5 +1,6 @@
 package com.chad.community.repository;
 
+import com.chad.community.dto.UserResponseDto;
 import com.chad.community.entity.User;
 import org.springframework.stereotype.Repository;
 
@@ -44,5 +45,15 @@ public class UserRepository {
         }
 
         return false;
+    }
+
+    public User findUserById(int id) {
+        for (User user : userList) {
+            if (id == user.getId()) {
+                return user;
+            }
+        }
+
+        return null;
     }
 }

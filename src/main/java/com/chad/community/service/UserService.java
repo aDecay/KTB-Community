@@ -47,4 +47,9 @@ public class UserService {
     public User findUserByEmailAndPassword(String email, String password) {
         return userRepository.findUserByEmailAndPassword(email, password);
     }
+
+    public UserResponseDto getMyUser(int userId) {
+        User user = userRepository.findUserById(userId);
+        return UserMapper.mapUserToUserResponse(user);
+    }
 }
