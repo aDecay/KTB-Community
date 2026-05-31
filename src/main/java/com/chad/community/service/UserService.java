@@ -3,11 +3,13 @@ package com.chad.community.service;
 import com.chad.community.dto.UserExistenceResponseDto;
 import com.chad.community.dto.UserResponseDto;
 import com.chad.community.dto.UserRequestDto;
+import com.chad.community.dto.UserUpdateRequestDto;
 import com.chad.community.entity.User;
 import com.chad.community.exceptions.CustomException;
 import com.chad.community.exceptions.ErrorCode;
 import com.chad.community.mapper.UserMapper;
 import com.chad.community.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,37 @@ public class UserService {
     }
 
     public User findUserByEmailAndPassword(String email, String password) {
-        return userRepository.findUserByEmailAndPassword(email, password);
+        return userRepository.findUserByEmailAndPassword(email, password).orElse(null);
+    }
+
+    public UserResponseDto getMyUser(int userId) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        return UserMapper.mapUserToUserResponse(user);
+    }
+
+    public UserResponseDto updateMyUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (userUpdateRequestDto.password().isPresent()) {
+            user.setPassword(userUpdateRequestDto.password().get());
+        }
+
+        if (userUpdateRequestDto.nickname().isPresent()) {
+            user.setNickname(userUpdateRequestDto.nickname().get());
+        }
+
+        if (userUpdateRequestDto.profileImage().isPresent()) {
+            user.setProfileImage(userUpdateRequestDto.profileImage().get());
+        }
+
+        UserResponseDto dto = UserMapper.mapUserToUserResponse(user);
+        return dto;
+    }
+
+    public void deleteMyUser(int userId) {
+        userRepository.deleteUserById(userId);
     }
 }

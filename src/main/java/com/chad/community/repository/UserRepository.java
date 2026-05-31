@@ -1,9 +1,11 @@
 package com.chad.community.repository;
 
+import com.chad.community.dto.UserResponseDto;
 import com.chad.community.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -16,33 +18,27 @@ public class UserRepository {
         return user;
     }
 
-    public User findUserByEmailAndPassword(String email, String password) {
-        for (User user : userList) {
-            if (email.equals(user.getEmail()) && password.equals(user.getPassword())) {
-                return user;
-            }
-        }
-
-        return null;
+    public Optional<User> findUserByEmailAndPassword(String email, String password) {
+        return userList.stream()
+                .filter(user -> user.getEmail().equals(email) && user.getPassword().equals(password))
+                .findFirst();
     }
 
     public boolean userEmailExists(String email) {
-        for (User user : userList) {
-            if (email.equals(user.getEmail())) {
-                return true;
-            }
-        }
-
-        return false;
+        return userList.stream().anyMatch(user -> user.getEmail().equals(email));
     }
 
     public boolean userNicknameExists(String nickname) {
-        for (User user : userList) {
-            if (nickname.equals(user.getNickname())) {
-                return true;
-            }
-        }
+        return userList.stream().anyMatch(user -> user.getNickname().equals(nickname));
+    }
 
-        return false;
+    public Optional<User> findUserById(int id) {
+        return userList.stream()
+                .filter(user -> user.getId() == id)
+                .findFirst();
+    }
+
+    public void deleteUserById(int userId) {
+        userList.removeIf(user -> userId == user.getId());
     }
 }
