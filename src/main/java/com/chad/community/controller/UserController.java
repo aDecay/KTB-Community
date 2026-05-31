@@ -46,4 +46,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(user, "user found successfully"));
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteMyUser(@AuthenticationParameter AuthenticationInfo authenticationInfo) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        userService.deleteMyUser(authenticationInfo.userId());
+
+        return ResponseEntity.noContent().build();
+    }
 }

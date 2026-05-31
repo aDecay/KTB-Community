@@ -56,4 +56,8 @@ public class UserRepository {
 
         return null;
     }
+
+    public void deleteUserById(int userId) {
+        userList.removeIf(user -> userId == user.getId());
+    }
 }

@@ -52,4 +52,8 @@ public class UserService {
         User user = userRepository.findUserById(userId);
         return UserMapper.mapUserToUserResponse(user);
     }
+
+    public void deleteMyUser(int userId) {
+        userRepository.deleteUserById(userId);
+    }
 }
