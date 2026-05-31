@@ -45,15 +45,12 @@ public class UserService {
     }
 
     public User findUserByEmailAndPassword(String email, String password) {
-        return userRepository.findUserByEmailAndPassword(email, password);
+        return userRepository.findUserByEmailAndPassword(email, password).orElse(null);
     }
 
     public UserResponseDto getMyUser(int userId) {
-        User user = userRepository.findUserById(userId);
-
-        if (user == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return UserMapper.mapUserToUserResponse(user);
     }
