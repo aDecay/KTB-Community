@@ -9,7 +9,6 @@ import com.chad.community.exceptions.CustomException;
 import com.chad.community.exceptions.ErrorCode;
 import com.chad.community.mapper.UserMapper;
 import com.chad.community.repository.UserRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +19,17 @@ public class UserService {
 
     public UserResponseDto createUser(UserRequestDto userRequest) {
         // Email 중복 검사
-        if (userRepository.userEmailExists(userRequest.email())) {
+        if (userRepository.existsByEmail(userRequest.email())) {
             throw new CustomException(ErrorCode.USER_EMAIL_DUPLICATED);
         }
 
         // Nickname 중복 검사
-        if (userRepository.userNicknameExists(userRequest.nickname())) {
+        if (userRepository.existsByNickname(userRequest.nickname())) {
             throw new CustomException(ErrorCode.USER_NICKNAME_DUPLICATED);
         }
 
         // User 저장
-        User user = userRepository.saveUser(UserMapper.mapUserRequestToUser(userRequest));
+        User user = userRepository.save(UserMapper.mapUserRequestToUser(userRequest));
 
         return UserMapper.mapUserToUserResponse(user);
     }
@@ -40,8 +39,8 @@ public class UserService {
             throw new CustomException(ErrorCode.USER_INVALID_EXISTENCE_CHECK);
         }
 
-        boolean emailExists = email == null || userRepository.userEmailExists(email);
-        boolean nicknameExists = nickname == null || userRepository.userNicknameExists(nickname);
+        boolean emailExists = email == null || userRepository.existsByEmail(email);
+        boolean nicknameExists = nickname == null || userRepository.existsByNickname(nickname);
 
         return UserMapper.mapBooleanToUserDuplicationResponse(emailExists && nicknameExists);
     }
@@ -51,14 +50,14 @@ public class UserService {
     }
 
     public UserResponseDto getMyUser(int userId) {
-        User user = userRepository.findUserById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return UserMapper.mapUserToUserResponse(user);
     }
 
     public UserResponseDto updateMyUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
-        User user = userRepository.findUserById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (userUpdateRequestDto.password().isPresent()) {
@@ -73,11 +72,10 @@ public class UserService {
             user.setProfileImage(userUpdateRequestDto.profileImage().get());
         }
 
-        UserResponseDto dto = UserMapper.mapUserToUserResponse(user);
-        return dto;
+        return UserMapper.mapUserToUserResponse(user);
     }
 
     public void deleteMyUser(int userId) {
-        userRepository.deleteUserById(userId);
+        userRepository.deleteById(userId);
     }
 }

@@ -7,13 +7,12 @@ import com.chad.community.entity.User;
 
 public class UserMapper {
     public static User mapUserRequestToUser(UserRequestDto userRequestDto) {
-        User user = new User();
-        user.setEmail(userRequestDto.email());
-        user.setPassword(userRequestDto.password());
-        user.setNickname(userRequestDto.nickname());
-        user.setProfileImage(userRequestDto.profileImage());
-
-        return user;
+        return User.builder()
+                .email(userRequestDto.email())
+                .password(userRequestDto.password())
+                .nickname(userRequestDto.nickname())
+                .profileImage(userRequestDto.profileImage())
+                .build();
     }
 
     public static UserResponseDto mapUserToUserResponse(User user) {
