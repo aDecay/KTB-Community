@@ -11,12 +11,14 @@ import com.chad.community.mapper.UserMapper;
 import com.chad.community.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
+    @Transactional
     public UserResponseDto createUser(UserRequestDto userRequest) {
         // Email 중복 검사
         if (userRepository.existsByEmail(userRequest.email())) {
@@ -34,6 +36,7 @@ public class UserService {
         return UserMapper.mapUserToUserResponse(user);
     }
 
+    @Transactional(readOnly = true)
     public UserExistenceResponseDto checkExistence(String email, String nickname) {
         if (email == null && nickname == null) {
             throw new CustomException(ErrorCode.USER_INVALID_EXISTENCE_CHECK);
@@ -45,10 +48,12 @@ public class UserService {
         return UserMapper.mapBooleanToUserDuplicationResponse(emailExists && nicknameExists);
     }
 
+    @Transactional(readOnly = true)
     public User findUserByEmailAndPassword(String email, String password) {
         return userRepository.findUserByEmailAndPassword(email, password).orElse(null);
     }
 
+    @Transactional(readOnly = true)
     public UserResponseDto getMyUser(int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -56,6 +61,7 @@ public class UserService {
         return UserMapper.mapUserToUserResponse(user);
     }
 
+    @Transactional
     public UserResponseDto updateMyUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -75,6 +81,7 @@ public class UserService {
         return UserMapper.mapUserToUserResponse(user);
     }
 
+    @Transactional
     public void deleteMyUser(int userId) {
         userRepository.deleteById(userId);
     }
