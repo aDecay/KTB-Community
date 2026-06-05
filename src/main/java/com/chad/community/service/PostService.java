@@ -1,0 +1,29 @@
+package com.chad.community.service;
+
+import com.chad.community.dto.AuthenticationInfo;
+import com.chad.community.dto.PostRequestDto;
+import com.chad.community.dto.PostResponseDto;
+import com.chad.community.entity.Post;
+import com.chad.community.entity.User;
+import com.chad.community.mapper.PostMapper;
+import com.chad.community.repository.PostRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class PostService {
+    private final PostRepository postRepository;
+    private final UserService userService;
+
+    @Transactional
+    public PostResponseDto createPostWithAuth(
+            AuthenticationInfo authenticationInfo,
+            PostRequestDto postRequestDto) {
+        User user = userService.findUserById(authenticationInfo.userId());
+        Post post = postRepository.save(PostMapper.mapUserAndPostRequestToPost(user, postRequestDto));
+
+        return PostMapper.mapPostToPostResponseDto(post);
+    }
+}

@@ -85,4 +85,10 @@ public class UserService {
     public void deleteMyUser(int userId) {
         userRepository.deleteById(userId);
     }
+
+    @Transactional(readOnly = true)
+    public User findUserById(int userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 }
