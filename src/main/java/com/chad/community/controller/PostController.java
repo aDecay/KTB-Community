@@ -46,7 +46,7 @@ public class PostController {
 
         PostResponseDto post = postService.getPostResponseById(postId);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(post, "post found successfully"));
     }
 
