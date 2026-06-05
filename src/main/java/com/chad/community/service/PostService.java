@@ -5,6 +5,8 @@ import com.chad.community.dto.PostRequestDto;
 import com.chad.community.dto.PostResponseDto;
 import com.chad.community.entity.Post;
 import com.chad.community.entity.User;
+import com.chad.community.exceptions.CustomException;
+import com.chad.community.exceptions.ErrorCode;
 import com.chad.community.mapper.PostMapper;
 import com.chad.community.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,8 @@ public class PostService {
     public PostResponseDto createPostWithAuth(
             AuthenticationInfo authenticationInfo,
             PostRequestDto postRequestDto) {
-        User user = userService.findUserById(authenticationInfo.userId());
-        Post post = postRepository.save(PostMapper.mapUserAndPostRequestToPost(user, postRequestDto));
+        User writer = userService.findUserById(authenticationInfo.userId());
+        Post post = postRepository.save(PostMapper.mapWriterAndPostRequestToPost(writer, postRequestDto));
 
         return PostMapper.mapPostToPostResponseDto(post);
     }

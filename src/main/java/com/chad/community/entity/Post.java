@@ -25,12 +25,12 @@ public class Post {
     private Instant createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true)
-    private User user;
+    @JoinColumn(name = "writer_id", nullable = true)
+    private User writer;
 
     @Builder
-    public Post(User user, String image, String content, String title) {
-        this.user = user;
+    public Post(User writer, String image, String content, String title) {
+        this.writer = writer;
         this.image = image;
         this.content = content;
         this.title = title;
