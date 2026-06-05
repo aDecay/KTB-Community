@@ -49,4 +49,18 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(post, "post found successfully"));
     }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(
+            @AuthenticationParameter AuthenticationInfo authenticationInfo,
+            @PathVariable long postId
+    ) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        postService.deletePostByIdWithAuth(postId, authenticationInfo);
+
+        return ResponseEntity.noContent().build();
+    }
 }

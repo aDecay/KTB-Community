@@ -38,4 +38,16 @@ public class PostService {
 
         return PostMapper.mapPostToPostResponseDto(post);
     }
+
+    @Transactional
+    public void deletePostByIdWithAuth(long postId, AuthenticationInfo authenticationInfo) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (post.getWriter().getId() != authenticationInfo.userId()) {
+            throw new CustomException(ErrorCode.FORBIDDEN);
+        }
+
+        postRepository.deleteById(postId);
+    }
 }

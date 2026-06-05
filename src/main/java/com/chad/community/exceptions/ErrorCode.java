@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, -1001, "unauthorized"),
+    FORBIDDEN(HttpStatus.FORBIDDEN, -1002, "no permission"),
     AUTH_FAILED(HttpStatus.BAD_REQUEST, -2001, "auth failed"),
     AUTH_EXPIRED(HttpStatus.UNAUTHORIZED, -2002, "auth expired"),
     AUTH_INVALID(HttpStatus.UNAUTHORIZED, -2003, "invalid auth"),
