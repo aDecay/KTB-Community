@@ -28,4 +28,14 @@ public class PostService {
 
         return PostMapper.mapPostToPostResponseDto(post);
     }
+
+    @Transactional
+    public PostResponseDto getPostResponseById(long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        post.increaseViewCount();
+
+        return PostMapper.mapPostToPostResponseDto(post);
+    }
 }

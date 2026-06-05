@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/posts")
 @Controller
@@ -35,5 +33,20 @@ public class PostController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(post, "post created successfully"));
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<ApiResponse<PostResponseDto>> getPost(
+            @AuthenticationParameter AuthenticationInfo authenticationInfo,
+            @PathVariable long postId
+    ) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        PostResponseDto post = postService.getPostResponseById(postId);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(post, "post found successfully"));
     }
 }
