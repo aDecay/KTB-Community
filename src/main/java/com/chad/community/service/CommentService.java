@@ -35,6 +35,24 @@ public class CommentService {
     }
 
     @Transactional
+    public CommentResponseDto updateComment(
+            AuthenticationInfo authenticationInfo,
+            long commentId,
+            CommentRequestDto commentRequestDto
+    ) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        if (comment.getWriter().getId() != authenticationInfo.userId()) {
+            throw new CustomException(ErrorCode.FORBIDDEN);
+        }
+
+        comment.updateComment(commentRequestDto.content());
+
+        return CommentMapper.mapCommentToCommentResponse(comment);
+    }
+
+    @Transactional
     public void deletePost(AuthenticationInfo authenticationInfo, long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));

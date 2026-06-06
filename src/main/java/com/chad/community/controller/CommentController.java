@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,6 +34,22 @@ public class CommentController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(comment, "comment created successfully"));
+    }
+
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<ApiResponse<CommentResponseDto>> updateComment(
+            @AuthenticationParameter AuthenticationInfo authenticationInfo,
+            @PathVariable long commentId,
+            @RequestBody @Valid CommentRequestDto commentRequestDto
+    ) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        CommentResponseDto comment = commentService.updateComment(authenticationInfo, commentId, commentRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(comment, "comment updated successfully"));
     }
 
     @DeleteMapping("/comments/{commentId}")

@@ -1,6 +1,8 @@
 package com.chad.community.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -32,5 +34,9 @@ public class Comment {
         this.content = content;
         this.writer = writer;
         this.post = post;
+    }
+
+    public void updateComment(String content) {
+        this.content = content;
     }
 }
