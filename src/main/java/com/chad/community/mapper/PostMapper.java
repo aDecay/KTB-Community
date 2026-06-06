@@ -20,7 +20,7 @@ public class PostMapper {
                 .build();
     }
 
-    public static PostResponseDto mapPostToPostResponseDto(Post post) {
+    public static PostResponseDto mapPostToPostResponse(Post post) {
         return new PostResponseDto(post.getId(), post.getTitle(), post.getContent(), post.getCreatedAt(), post.getViewCount(), UserMapper.mapUserToUserResponse(post.getWriter()));
     }
 }

@@ -26,7 +26,7 @@ public class PostService {
         User writer = userService.findUserById(authenticationInfo.userId());
         Post post = postRepository.save(PostMapper.mapWriterAndPostRequestToPost(writer, postRequestDto));
 
-        return PostMapper.mapPostToPostResponseDto(post);
+        return PostMapper.mapPostToPostResponse(post);
     }
 
     @Transactional
@@ -36,7 +36,7 @@ public class PostService {
 
         post.increaseViewCount();
 
-        return PostMapper.mapPostToPostResponseDto(post);
+        return PostMapper.mapPostToPostResponse(post);
     }
 
     @Transactional
