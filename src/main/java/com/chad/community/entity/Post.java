@@ -1,6 +1,8 @@
 package com.chad.community.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.Instant;
@@ -38,5 +40,11 @@ public class Post {
 
     public void increaseViewCount() {
         viewCount++;
+    }
+
+    public void updatePost(String title, String content, String image) {
+        this.title = title;
+        this.content = content;
+        this.image = image;
     }
 }

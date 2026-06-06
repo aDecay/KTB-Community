@@ -50,6 +50,22 @@ public class PostController {
                 .body(ApiResponse.success(post, "post found successfully"));
     }
 
+    @PutMapping("/{postId}")
+    public ResponseEntity<ApiResponse<PostResponseDto>> updatePost(
+            @AuthenticationParameter AuthenticationInfo authenticationInfo,
+            @PathVariable long postId,
+            @RequestBody @Valid PostRequestDto postRequestDto
+    ) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        PostResponseDto post = postService.updatePostByIdWithAuth(authenticationInfo, postId, postRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(post, "post updated successfully"));
+    }
+
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePost(
             @AuthenticationParameter AuthenticationInfo authenticationInfo,

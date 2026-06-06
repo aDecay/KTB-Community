@@ -40,6 +40,23 @@ public class PostService {
     }
 
     @Transactional
+    public PostResponseDto updatePostByIdWithAuth(AuthenticationInfo authenticationInfo,
+                                                  long postId,
+                                                  PostRequestDto postRequestDto
+    ) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (post.getWriter().getId() != authenticationInfo.userId()) {
+            throw new CustomException(ErrorCode.FORBIDDEN);
+        }
+
+        post.updatePost(postRequestDto.title(), postRequestDto.content(), postRequestDto.image());
+
+        return PostMapper.mapPostToPostResponse(post);
+    }
+
+    @Transactional
     public void deletePostByIdWithAuth(AuthenticationInfo authenticationInfo, long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
