@@ -6,6 +6,7 @@ public record PostResponseDto(
         long postId,
         String title,
         String content,
+        String image,
         Instant createdAt,
         int viewCount,
         UserResponseDto writer

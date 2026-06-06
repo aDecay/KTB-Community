@@ -21,6 +21,6 @@ public class PostMapper {
     }
 
     public static PostResponseDto mapPostToPostResponse(Post post) {
-        return new PostResponseDto(post.getId(), post.getTitle(), post.getContent(), post.getCreatedAt(), post.getViewCount(), UserMapper.mapUserToUserResponse(post.getWriter()));
+        return new PostResponseDto(post.getId(), post.getTitle(), post.getContent(), post.getImage(), post.getCreatedAt(), post.getViewCount(), UserMapper.mapUserToUserResponse(post.getWriter()));
     }
 }
