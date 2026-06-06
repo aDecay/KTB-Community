@@ -59,7 +59,7 @@ public class PostController {
             throw new CustomException(ErrorCode.UNAUTHORIZED);
         }
 
-        postService.deletePostByIdWithAuth(postId, authenticationInfo);
+        postService.deletePostByIdWithAuth(authenticationInfo, postId);
 
         return ResponseEntity.noContent().build();
     }

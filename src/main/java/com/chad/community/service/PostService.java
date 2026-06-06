@@ -40,7 +40,7 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePostByIdWithAuth(long postId, AuthenticationInfo authenticationInfo) {
+    public void deletePostByIdWithAuth(AuthenticationInfo authenticationInfo, long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
