@@ -6,6 +6,8 @@ import com.chad.community.dto.CommentResponseDto;
 import com.chad.community.entity.Comment;
 import com.chad.community.entity.Post;
 import com.chad.community.entity.User;
+import com.chad.community.exceptions.CustomException;
+import com.chad.community.exceptions.ErrorCode;
 import com.chad.community.mapper.CommentMapper;
 import com.chad.community.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +32,17 @@ public class CommentService {
         Comment comment = commentRepository.save(CommentMapper.mapCommentRequestToComment(user, post, commentRequestDto));
 
         return CommentMapper.mapCommentToCommentResponse(comment);
+    }
+
+    @Transactional
+    public void deletePost(AuthenticationInfo authenticationInfo, long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        if (comment.getWriter().getId() != authenticationInfo.userId()) {
+            throw new CustomException(ErrorCode.FORBIDDEN);
+        }
+
+        commentRepository.deleteById(comment.getId());
     }
 }

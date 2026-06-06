@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,5 +37,19 @@ public class CommentController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(comment, "comment created successfully"));
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+            @AuthenticationParameter AuthenticationInfo authenticationInfo,
+            @PathVariable long commentId
+    ) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        commentService.deletePost(authenticationInfo, commentId);
+
+        return ResponseEntity.noContent().build();
     }
 }
