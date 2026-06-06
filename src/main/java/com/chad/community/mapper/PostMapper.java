@@ -12,11 +12,7 @@ public class PostMapper {
                 .writer(writer)
                 .title(postRequestDto.title())
                 .content(postRequestDto.content())
-                .image(
-                        postRequestDto.image() == null || postRequestDto.image().isBlank()
-                        ? null
-                        : postRequestDto.image()
-                )
+                .image(postRequestDto.image())
                 .build();
     }
 

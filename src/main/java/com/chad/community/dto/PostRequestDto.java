@@ -1,5 +1,6 @@
 package com.chad.community.dto;
 
+import com.chad.community.annotation.NullOrNotBlank;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -10,6 +11,7 @@ public record PostRequestDto (
         @NotBlank(message = "본문을 필수로 입력해야 합니다.")
         @Size(max = 15000, message = "본문은 15,000자까지 입력 가능합니다.")
         String content,
+        @NullOrNotBlank(message = "이미지 경로로 빈 문자열을 사용할 수 없습니다.")
         @Size(max = 255, message = "이미지 경로는 255자까지 가능합니다.")
         String image
 ) {}
