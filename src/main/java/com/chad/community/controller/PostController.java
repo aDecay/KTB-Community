@@ -9,15 +9,21 @@ import com.chad.community.exceptions.ErrorCode;
 import com.chad.community.service.PostService;
 import com.chad.community.utils.ApiResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/posts")
 @Controller
 @RequiredArgsConstructor
+@Validated
 public class PostController {
     private final PostService postService;
 
@@ -48,6 +54,22 @@ public class PostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(post, "post found successfully"));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<PostResponseDto>>> getPostList(
+            @AuthenticationParameter AuthenticationInfo authenticationInfo,
+            @RequestParam(required = false) Long cursor,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) int limit
+    ) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        List<PostResponseDto> postList = postService.getPostList(cursor, limit);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(postList, "post list found successfully"));
     }
 
     @PutMapping("/{postId}")

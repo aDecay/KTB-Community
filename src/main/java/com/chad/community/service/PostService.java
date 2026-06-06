@@ -10,8 +10,11 @@ import com.chad.community.exceptions.ErrorCode;
 import com.chad.community.mapper.PostMapper;
 import com.chad.community.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,21 @@ public class PostService {
         post.increaseViewCount();
 
         return PostMapper.mapPostToPostResponse(post);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostResponseDto> getPostList(Long cursor,  int limit) {
+        List<Post> postList;
+
+        if (cursor == null) {
+            postList = postRepository.findAllByOrderByIdDesc(Limit.of(limit));
+        } else {
+            postList = postRepository.findByIdLessThanOrderByIdDesc(cursor, Limit.of(limit));
+        }
+
+        return postList.stream()
+                .map(PostMapper::mapPostToPostResponse)
+                .toList();
     }
 
     @Transactional
