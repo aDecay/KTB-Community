@@ -10,6 +10,7 @@ public record PostResponseDto(
         Instant createdAt,
         int viewCount,
         int commentCount,
+        int likeCount,
         UserResponseDto writer
 ) {
 }
