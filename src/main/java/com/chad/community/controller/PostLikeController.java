@@ -10,10 +10,7 @@ import com.chad.community.utils.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,5 +45,20 @@ public class PostLikeController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(postLike, "post like found successfully"));
+    }
+
+    @DeleteMapping("/posts/{postId}/likes")
+    public ResponseEntity<ApiResponse<PostLikeResponseDto>> deletePostLike(
+            @AuthenticationParameter AuthenticationInfo authenticationInfo,
+            @PathVariable long postId
+    ) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        PostLikeResponseDto postLike = postLikeService.deletePostLike(authenticationInfo, postId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(postLike, "post unliked successfully"));
     }
 }

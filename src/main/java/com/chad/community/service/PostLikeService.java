@@ -46,4 +46,20 @@ public class PostLikeService {
 
         return PostLikeMapper.mapCountAndLikedToPostLikeResponse(post.getLikeCount(), liked);
     }
+
+    @Transactional
+    public PostLikeResponseDto deletePostLike(AuthenticationInfo authenticationInfo, long postId) {
+        User user = userService.findUserById(authenticationInfo.userId());
+        Post post = postService.findPostById(postId);
+
+        if (!postLikeRepository.existsByUserIdAndPostId(user.getId(), post.getId())) {
+            throw new CustomException(ErrorCode.POSTLIKE_NOT_FOUND);
+        }
+
+        postLikeRepository.deleteByUserIdAndPostId(user.getId(), post.getId());
+
+        post.decreaseLikeCount();
+
+        return PostLikeMapper.mapCountAndLikedToPostLikeResponse(post.getLikeCount(), false);
+    }
 }
