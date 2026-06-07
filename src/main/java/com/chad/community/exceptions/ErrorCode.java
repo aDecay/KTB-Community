@@ -21,7 +21,9 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, -5001, "comment not found"),
     POSTLIKE_NOT_FOUND(HttpStatus.NOT_FOUND, -6001, "post like not found"),
     POSTLIKE_DUPLICATED(HttpStatus.CONFLICT, -6002, "post like duplicated"),
-    IMAGE_INVALID_TYPE(HttpStatus.BAD_REQUEST, -7001, "invalid image type");
+    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, -7001, "image not found"),
+    IMAGE_INVALID_TYPE(HttpStatus.BAD_REQUEST, -7002, "invalid image type"),
+    INVALID_IMAGE_FORMAT(HttpStatus.BAD_REQUEST, -7003, "invalid image format");
 
     private final HttpStatus httpStatus;
     private final int code;

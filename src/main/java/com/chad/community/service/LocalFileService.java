@@ -3,6 +3,8 @@ package com.chad.community.service;
 import com.chad.community.exceptions.CustomException;
 import com.chad.community.exceptions.ErrorCode;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -45,5 +47,21 @@ public class LocalFileService implements FileService {
         } catch (IOException e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public Resource getFile(String filename) {
+        Path path = Paths.get(uploadDir)
+                .toAbsolutePath()
+                .normalize()
+                .resolve(filename);
+
+        Resource resource =  new FileSystemResource(path);
+
+        if (!resource.exists()) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+
+        return resource;
     }
 }
