@@ -32,6 +32,7 @@ public class CommentService {
         User user = userService.findUserById(authenticationInfo.userId());
         Post post = postService.findPostById(postId);
         Comment comment = commentRepository.save(CommentMapper.mapCommentRequestToComment(user, post, commentRequestDto));
+        post.increaseCommentCount();
 
         return CommentMapper.mapCommentToCommentResponse(comment);
     }
@@ -74,6 +75,8 @@ public class CommentService {
         if (comment.getWriter().getId() != authenticationInfo.userId()) {
             throw new CustomException(ErrorCode.FORBIDDEN);
         }
+
+        comment.getPost().decreaseCommentCount();
 
         commentRepository.deleteById(comment.getId());
     }

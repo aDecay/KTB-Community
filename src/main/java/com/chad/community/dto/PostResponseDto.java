@@ -9,6 +9,7 @@ public record PostResponseDto(
         String image,
         Instant createdAt,
         int viewCount,
+        int commentCount,
         UserResponseDto writer
 ) {
 }
