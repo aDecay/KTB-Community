@@ -2,14 +2,10 @@ package com.chad.community.dto;
 
 import java.time.Instant;
 
-public record PostResponseDto(
-        long postId,
-        String title,
+public record CommentResponseDto(
+        long commentId,
         String content,
-        String image,
         Instant createdAt,
-        int viewCount,
-        int commentCount,
         UserResponseDto writer
 ) {
 }

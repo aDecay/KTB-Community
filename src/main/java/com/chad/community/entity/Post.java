@@ -22,6 +22,8 @@ public class Post {
     private String image;
     @Column(nullable = false)
     private int viewCount;                          // int는 자동 0 초기화
+    @Column(nullable = false)
+    private int commentCount;                       // int는 자동 0 초기화
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
@@ -40,6 +42,14 @@ public class Post {
 
     public void increaseViewCount() {
         viewCount++;
+    }
+
+    public void increaseCommentCount() {
+        commentCount++;
+    }
+
+    public void decreaseCommentCount() {
+        commentCount--;
     }
 
     public void updatePost(String title, String content, String image) {

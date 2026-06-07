@@ -85,4 +85,10 @@ public class PostService {
 
         postRepository.deleteById(postId);
     }
+
+    @Transactional(readOnly = true)
+    public Post findPostById(long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+    }
 }
