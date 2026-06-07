@@ -75,7 +75,7 @@ public class UserService {
         }
 
         if (userUpdateRequestDto.profileImage().isPresent()) {
-            user.setProfileImage(userUpdateRequestDto.profileImage().get());
+            user.setProfileImageUrl(userUpdateRequestDto.profileImage().get());
         }
 
         return UserMapper.mapUserToUserResponse(user);

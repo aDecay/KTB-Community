@@ -13,5 +13,5 @@ public record PostRequestDto (
         String content,
         @NullOrNotBlank(message = "이미지 경로로 빈 문자열을 사용할 수 없습니다.")
         @Size(max = 255, message = "이미지 경로는 255자까지 가능합니다.")
-        String image
+        String imageUrl
 ) {}

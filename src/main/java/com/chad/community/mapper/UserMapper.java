@@ -11,12 +11,12 @@ public class UserMapper {
                 .email(userRequestDto.email())
                 .password(userRequestDto.password())
                 .nickname(userRequestDto.nickname())
-                .profileImage(userRequestDto.profileImage())
+                .profileImageUrl(userRequestDto.profileImageUrl())
                 .build();
     }
 
     public static UserResponseDto mapUserToUserResponse(User user) {
-        return new UserResponseDto(user.getId(), user.getNickname(), user.getProfileImage());
+        return new UserResponseDto(user.getId(), user.getNickname(), user.getProfileImageUrl());
     }
 
     public static UserExistenceResponseDto mapBooleanToUserDuplicationResponse(boolean exists) {

@@ -69,7 +69,7 @@ public class PostService {
             throw new CustomException(ErrorCode.FORBIDDEN);
         }
 
-        post.updatePost(postRequestDto.title(), postRequestDto.content(), postRequestDto.image());
+        post.updatePost(postRequestDto.title(), postRequestDto.content(), postRequestDto.imageUrl());
 
         return PostMapper.mapPostToPostResponse(post);
     }
