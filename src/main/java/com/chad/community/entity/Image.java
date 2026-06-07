@@ -4,10 +4,12 @@ import com.chad.community.enumeration.ImageType;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "images")
 @Getter
+@NoArgsConstructor
 public class Image {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
