@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PostLikeService {
-    private final PostLikeRepository likeRepository;
+    private final PostLikeRepository postLikeRepository;
     private final UserService userService;
     private final PostService postService;
 
@@ -25,15 +25,15 @@ public class PostLikeService {
         User user = userService.findUserById(authenticationInfo.userId());
         Post post = postService.findPostById(postId);
 
-        if (likeRepository.existsByUserIdAndPostId(user.getId(), post.getId())) {
+        if (postLikeRepository.existsByUserIdAndPostId(user.getId(), post.getId())) {
             throw new CustomException(ErrorCode.POSTLIKE_DUPLICATED);
         }
 
-        PostLike postLike = PostLikeMapper.mapUserAndPostToLike(user, post);
-        likeRepository.save(postLike);
+        PostLike postLike = PostLikeMapper.mapUserAndPostToPostLike(user, post);
+        postLikeRepository.save(postLike);
 
         post.increaseLikeCount();
 
-        return PostLikeMapper.mapCountAndLikedToLikeResponse(post.getLikeCount(), true);
+        return PostLikeMapper.mapCountAndLikedToPostLikeResponse(post.getLikeCount(), true);
     }
 }

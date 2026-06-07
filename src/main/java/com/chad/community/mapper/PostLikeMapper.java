@@ -6,7 +6,7 @@ import com.chad.community.entity.Post;
 import com.chad.community.entity.User;
 
 public class PostLikeMapper {
-    public static PostLike mapUserAndPostToLike(User user, Post post) {
+    public static PostLike mapUserAndPostToPostLike(User user, Post post) {
         return PostLike.builder()
                 .user(user)
                 .post(post)
@@ -14,7 +14,7 @@ public class PostLikeMapper {
     }
 
 
-    public static PostLikeResponseDto mapCountAndLikedToLikeResponse(int likeCount, boolean liked) {
+    public static PostLikeResponseDto mapCountAndLikedToPostLikeResponse(int likeCount, boolean liked) {
         return new PostLikeResponseDto(likeCount, liked);
     }
 }
