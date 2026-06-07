@@ -36,4 +36,14 @@ public class PostLikeService {
 
         return PostLikeMapper.mapCountAndLikedToPostLikeResponse(post.getLikeCount(), true);
     }
+
+    @Transactional(readOnly = true)
+    public PostLikeResponseDto getPostLike(AuthenticationInfo authenticationInfo, long postId) {
+        User user = userService.findUserById(authenticationInfo.userId());
+        Post post = postService.findPostById(postId);
+
+        boolean liked = postLikeRepository.existsByUserIdAndPostId(user.getId(), post.getId());
+
+        return PostLikeMapper.mapCountAndLikedToPostLikeResponse(post.getLikeCount(), liked);
+    }
 }

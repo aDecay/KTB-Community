@@ -34,4 +34,19 @@ public class PostLikeController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(postLike, "post like added successfully"));
     }
+
+    @GetMapping("/posts/{postId}/likes")
+    public ResponseEntity<ApiResponse<PostLikeResponseDto>> getPostLike(
+            @AuthenticationParameter AuthenticationInfo authenticationInfo,
+            @PathVariable long postId
+    ) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        PostLikeResponseDto postLike = postLikeService.getPostLike(authenticationInfo, postId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(postLike, "post like found successfully"));
+    }
 }
