@@ -17,7 +17,9 @@ public enum ErrorCode {
     USER_NICKNAME_DUPLICATED(HttpStatus.CONFLICT, -3003, "user nickname duplicated"),
     USER_INVALID_EXISTENCE_CHECK(HttpStatus.BAD_REQUEST, -3004, "email or nickname must be specified"),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, -4001, "post not found"),
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, -5001, "comment not found");
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, -5001, "comment not found"),
+    POSTLIKE_NOT_FOUND(HttpStatus.NOT_FOUND, -6001, "post like not found"),
+    POSTLIKE_DUPLICATED(HttpStatus.CONFLICT, -6002, "post like duplicated");
 
     private final HttpStatus httpStatus;
     private final int code;
