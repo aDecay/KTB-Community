@@ -20,5 +20,5 @@ public record UserRequestDto(
 
     @NotBlank(message = "프로필 이미지를 필수로 등록해야 합니다.")
     @Size(max = 255, message = "프로필 이미지 경로는 255자까지 가능합니다.")
-    String profileImage
+    String profileImageUrl
 ) {}

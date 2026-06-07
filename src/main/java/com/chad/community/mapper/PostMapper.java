@@ -12,11 +12,11 @@ public class PostMapper {
                 .writer(writer)
                 .title(postRequestDto.title())
                 .content(postRequestDto.content())
-                .image(postRequestDto.image())
+                .imageUrl(postRequestDto.imageUrl())
                 .build();
     }
 
     public static PostResponseDto mapPostToPostResponse(Post post) {
-        return new PostResponseDto(post.getId(), post.getTitle(), post.getContent(), post.getImage(), post.getCreatedAt(), post.getViewCount(), post.getCommentCount(), post.getLikeCount(), UserMapper.mapUserToUserResponse(post.getWriter()));
+        return new PostResponseDto(post.getId(), post.getTitle(), post.getContent(), post.getImageUrl(), post.getCreatedAt(), post.getViewCount(), post.getCommentCount(), post.getLikeCount(), UserMapper.mapUserToUserResponse(post.getWriter()));
     }
 }

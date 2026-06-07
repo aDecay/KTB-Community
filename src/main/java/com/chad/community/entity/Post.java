@@ -1,8 +1,6 @@
 package com.chad.community.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.Instant;
@@ -19,7 +17,7 @@ public class Post {
     @Column(nullable = false, columnDefinition = "TEXT") @Setter
     private String content;
     @Column(nullable = true, length = 255) @Setter
-    private String image;
+    private String imageUrl;
     @Column(nullable = false)
     private int viewCount;                          // int는 자동 0 초기화
     @Column(nullable = false)
@@ -35,9 +33,9 @@ public class Post {
     private User writer;
 
     @Builder
-    public Post(User writer, String image, String content, String title) {
+    public Post(User writer, String imageUrl, String content, String title) {
         this.writer = writer;
-        this.image = image;
+        this.imageUrl = imageUrl;
         this.content = content;
         this.title = title;
     }
@@ -65,6 +63,6 @@ public class Post {
     public void updatePost(String title, String content, String image) {
         this.title = title;
         this.content = content;
-        this.image = image;
+        this.imageUrl = image;
     }
 }

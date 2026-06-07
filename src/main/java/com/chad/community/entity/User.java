@@ -17,13 +17,13 @@ public class User {
     @Column(nullable = false, length = 10) @Setter
     private String nickname;
     @Column(nullable = false, length = 255) @Setter
-    private String profileImage;
+    private String profileImageUrl;
 
     @Builder
-    public User(String email, String password, String nickname, String profileImage) {
+    public User(String email, String password, String nickname, String profileImageUrl) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-        this.profileImage = profileImage;
+        this.profileImageUrl = profileImageUrl;
     }
 }
