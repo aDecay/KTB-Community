@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -32,6 +34,18 @@ public class CommentService {
         Comment comment = commentRepository.save(CommentMapper.mapCommentRequestToComment(user, post, commentRequestDto));
 
         return CommentMapper.mapCommentToCommentResponse(comment);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommentResponseDto> getCommentList(long postId) {
+        // post 존재 여부 검사
+        postService.findPostById(postId);
+
+        List<Comment> comment = commentRepository.findAllByPostId(postId);
+
+        return comment.stream()
+                .map(CommentMapper::mapCommentToCommentResponse)
+                .toList();
     }
 
     @Transactional
@@ -63,4 +77,5 @@ public class CommentService {
 
         commentRepository.deleteById(comment.getId());
     }
+
 }

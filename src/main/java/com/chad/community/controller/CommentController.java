@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class CommentController {
@@ -34,6 +36,21 @@ public class CommentController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(comment, "comment created successfully"));
+    }
+
+    @GetMapping("/posts/{postId}/comments")
+    public ResponseEntity<ApiResponse<List<CommentResponseDto>>> getCommentList(
+            @AuthenticationParameter AuthenticationInfo authenticationInfo,
+            @PathVariable long postId
+    ) {
+        if (authenticationInfo == null) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
+
+        List<CommentResponseDto> comment = commentService.getCommentList(postId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(comment, "comment list found successfully"));
     }
 
     @PutMapping("/comments/{commentId}")
