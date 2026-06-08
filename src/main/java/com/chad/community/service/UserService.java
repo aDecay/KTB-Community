@@ -54,12 +54,14 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User findUserByEmailAndPassword(String email, String password) {
-        User user = userRepository.findUserByEmail(email).orElse(null);
-        if (user != null && passwordHelper.checkPassword(password, user.getPassword())) {
-            return user;
-        } else {
-            return null;
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (passwordHelper.checkPassword(password, user.getPassword())) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
+
+        return user;
     }
 
     @Transactional(readOnly = true)
