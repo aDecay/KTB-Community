@@ -26,7 +26,7 @@ public class JwtUtil {
         this.expirationTime = expirationTime;
     }
 
-    public String createToken(int userId) {
+    public String createToken(long userId) {
         Claims claims = Jwts.claims();
         claims.put("userId", userId);
 
@@ -41,8 +41,8 @@ public class JwtUtil {
                 .compact();
     }
 
-    public int getUserId(String token) {
-        return parseClaims(token).get("userId", Integer.class);
+    public long getUserId(String token) {
+        return parseClaims(token).get("userId", Long.class);
     }
 
 

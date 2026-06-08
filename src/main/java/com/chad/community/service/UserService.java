@@ -9,6 +9,7 @@ import com.chad.community.exceptions.CustomException;
 import com.chad.community.exceptions.ErrorCode;
 import com.chad.community.mapper.UserMapper;
 import com.chad.community.repository.UserRepository;
+import com.chad.community.utils.PasswordHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordHelper passwordHelper;
 
     @Transactional
     public UserResponseDto createUser(UserRequestDto userRequest) {
@@ -30,8 +32,10 @@ public class UserService {
             throw new CustomException(ErrorCode.USER_NICKNAME_DUPLICATED);
         }
 
+        String hashedPassword = passwordHelper.hashPassword(userRequest.password());
+
         // User 저장
-        User user = userRepository.save(UserMapper.mapUserRequestToUser(userRequest));
+        User user = userRepository.save(UserMapper.mapUserRequestToUser(userRequest, hashedPassword));
 
         return UserMapper.mapUserToUserResponse(user);
     }
@@ -50,11 +54,18 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User findUserByEmailAndPassword(String email, String password) {
-        return userRepository.findUserByEmailAndPassword(email, password).orElse(null);
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (!passwordHelper.checkPassword(password, user.getPassword())) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        return user;
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto getMyUser(int userId) {
+    public UserResponseDto getMyUser(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -62,12 +73,13 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto updateMyUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
+    public UserResponseDto updateMyUser(long userId, UserUpdateRequestDto userUpdateRequestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (userUpdateRequestDto.password().isPresent()) {
-            user.setPassword(userUpdateRequestDto.password().get());
+            String password = passwordHelper.hashPassword(userUpdateRequestDto.password().get());
+            user.setPassword(password);
         }
 
         if (userUpdateRequestDto.nickname().isPresent()) {
@@ -82,12 +94,12 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteMyUser(int userId) {
+    public void deleteMyUser(long userId) {
         userRepository.deleteById(userId);
     }
 
     @Transactional(readOnly = true)
-    public User findUserById(int userId) {
+    public User findUserById(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }

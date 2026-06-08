@@ -17,14 +17,18 @@ public class AuthService {
     private final UserService userService;
 
     public AuthResponseDto createToken(AuthRequestDto authRequestDto) {
-        User user = userService.findUserByEmailAndPassword(authRequestDto.email(), authRequestDto.password());
+        try {
+            User user = userService.findUserByEmailAndPassword(authRequestDto.email(), authRequestDto.password());
 
-        if (user == null) {
-            throw new CustomException(ErrorCode.AUTH_FAILED);
+            String token = jwtUtil.createToken(user.getId());
+
+            return AuthMapper.mapTokenToAuthResponse(token);
+        } catch (CustomException e) {
+            if (e.getErrorCode() == ErrorCode.USER_NOT_FOUND) {
+                throw new CustomException(ErrorCode.AUTH_FAILED);
+            }
+
+            throw e;
         }
-
-        String token = jwtUtil.createToken(user.getId());
-
-        return AuthMapper.mapTokenToAuthResponse(token);
     }
 }

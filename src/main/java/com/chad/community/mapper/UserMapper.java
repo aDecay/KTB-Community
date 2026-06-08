@@ -6,10 +6,10 @@ import com.chad.community.dto.UserRequestDto;
 import com.chad.community.entity.User;
 
 public class UserMapper {
-    public static User mapUserRequestToUser(UserRequestDto userRequestDto) {
+    public static User mapUserRequestToUser(UserRequestDto userRequestDto, String hashedPassword) {
         return User.builder()
                 .email(userRequestDto.email())
-                .password(userRequestDto.password())
+                .password(hashedPassword)
                 .nickname(userRequestDto.nickname())
                 .profileImageUrl(userRequestDto.profileImageUrl())
                 .build();

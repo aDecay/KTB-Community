@@ -9,10 +9,10 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @Column(nullable = false, length = 320)
     private String email;
-    @Column(nullable = false, length = 60) @Setter
+    @Column(nullable = false, length = 128) @Setter
     private String password;
     @Column(nullable = false, length = 10) @Setter
     private String nickname;
