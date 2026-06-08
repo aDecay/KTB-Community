@@ -1,7 +1,7 @@
 package com.chad.community.dto;
 
 public record UserResponseDto(
-    int userId,
+    long userId,
     String nickname,
     String profileImage
 ) {}

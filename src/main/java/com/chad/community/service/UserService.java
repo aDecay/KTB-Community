@@ -65,7 +65,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserResponseDto getMyUser(int userId) {
+    public UserResponseDto getMyUser(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -73,7 +73,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto updateMyUser(int userId, UserUpdateRequestDto userUpdateRequestDto) {
+    public UserResponseDto updateMyUser(long userId, UserUpdateRequestDto userUpdateRequestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -94,12 +94,12 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteMyUser(int userId) {
+    public void deleteMyUser(long userId) {
         userRepository.deleteById(userId);
     }
 
     @Transactional(readOnly = true)
-    public User findUserById(int userId) {
+    public User findUserById(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }

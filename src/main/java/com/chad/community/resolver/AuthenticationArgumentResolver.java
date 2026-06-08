@@ -41,7 +41,7 @@ public class AuthenticationArgumentResolver implements HandlerMethodArgumentReso
 
         // AuthenticationInfo 생성
         String token = authorization.substring(7);
-        int userId = jwtUtil.getUserId(token);
+        long userId = jwtUtil.getUserId(token);
 
         return new AuthenticationInfo(userId);
     }
