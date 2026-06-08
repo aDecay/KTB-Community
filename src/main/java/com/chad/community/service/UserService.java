@@ -9,6 +9,7 @@ import com.chad.community.exceptions.CustomException;
 import com.chad.community.exceptions.ErrorCode;
 import com.chad.community.mapper.UserMapper;
 import com.chad.community.repository.UserRepository;
+import com.chad.community.utils.PasswordHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordHelper passwordHelper;
 
     @Transactional
     public UserResponseDto createUser(UserRequestDto userRequest) {
@@ -30,8 +32,10 @@ public class UserService {
             throw new CustomException(ErrorCode.USER_NICKNAME_DUPLICATED);
         }
 
+        String hashedPassword = passwordHelper.hashPassword(userRequest.password());
+
         // User 저장
-        User user = userRepository.save(UserMapper.mapUserRequestToUser(userRequest));
+        User user = userRepository.save(UserMapper.mapUserRequestToUser(userRequest, hashedPassword));
 
         return UserMapper.mapUserToUserResponse(user);
     }
@@ -50,7 +54,12 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User findUserByEmailAndPassword(String email, String password) {
-        return userRepository.findUserByEmailAndPassword(email, password).orElse(null);
+        User user = userRepository.findUserByEmail(email).orElse(null);
+        if (user != null && passwordHelper.checkPassword(password, user.getPassword())) {
+            return user;
+        } else {
+            return null;
+        }
     }
 
     @Transactional(readOnly = true)
@@ -67,7 +76,8 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (userUpdateRequestDto.password().isPresent()) {
-            user.setPassword(userUpdateRequestDto.password().get());
+            String password = passwordHelper.hashPassword(userUpdateRequestDto.password().get());
+            user.setPassword(password);
         }
 
         if (userUpdateRequestDto.nickname().isPresent()) {
