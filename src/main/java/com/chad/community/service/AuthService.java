@@ -24,7 +24,11 @@ public class AuthService {
 
             return AuthMapper.mapTokenToAuthResponse(token);
         } catch (CustomException e) {
-            throw new CustomException(ErrorCode.AUTH_FAILED);
+            if (e.getErrorCode() == ErrorCode.USER_NOT_FOUND) {
+                throw new CustomException(ErrorCode.AUTH_FAILED);
+            }
+
+            throw e;
         }
     }
 }

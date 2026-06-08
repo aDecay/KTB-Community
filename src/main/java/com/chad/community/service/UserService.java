@@ -57,7 +57,7 @@ public class UserService {
         User user = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if (passwordHelper.checkPassword(password, user.getPassword())) {
+        if (!passwordHelper.checkPassword(password, user.getPassword())) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
