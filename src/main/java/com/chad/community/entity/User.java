@@ -12,7 +12,7 @@ public class User {
     private int id;
     @Column(nullable = false, length = 320)
     private String email;
-    @Column(nullable = false, length = 60) @Setter
+    @Column(nullable = false, length = 128) @Setter
     private String password;
     @Column(nullable = false, length = 10) @Setter
     private String nickname;
