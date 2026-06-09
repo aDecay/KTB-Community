@@ -22,7 +22,7 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/posts/{postId}/comments")
+    @PostMapping("/v1/posts/{postId}/comments")
     public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(
             @AuthenticationParameter AuthenticationInfo authenticationInfo,
             @PathVariable long postId,
@@ -38,7 +38,7 @@ public class CommentController {
                 .body(ApiResponse.success(comment, "comment created successfully"));
     }
 
-    @GetMapping("/posts/{postId}/comments")
+    @GetMapping("/v1/posts/{postId}/comments")
     public ResponseEntity<ApiResponse<List<CommentResponseDto>>> getCommentList(
             @AuthenticationParameter AuthenticationInfo authenticationInfo,
             @PathVariable long postId
@@ -53,7 +53,7 @@ public class CommentController {
                 .body(ApiResponse.success(comment, "comment list found successfully"));
     }
 
-    @PutMapping("/comments/{commentId}")
+    @PutMapping("/v1/comments/{commentId}")
     public ResponseEntity<ApiResponse<CommentResponseDto>> updateComment(
             @AuthenticationParameter AuthenticationInfo authenticationInfo,
             @PathVariable long commentId,
@@ -69,7 +69,7 @@ public class CommentController {
                 .body(ApiResponse.success(comment, "comment updated successfully"));
     }
 
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/v1/comments/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @AuthenticationParameter AuthenticationInfo authenticationInfo,
             @PathVariable long commentId

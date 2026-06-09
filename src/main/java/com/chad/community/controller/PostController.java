@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/posts")
+@RequestMapping("/v1/posts")
 @Controller
 @RequiredArgsConstructor
 @Validated

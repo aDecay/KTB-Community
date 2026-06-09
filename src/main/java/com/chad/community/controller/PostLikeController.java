@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostLikeController {
     private final PostLikeService postLikeService;
 
-    @PostMapping("/posts/{postId}/likes")
+    @PostMapping("/v1/posts/{postId}/likes")
     public ResponseEntity<ApiResponse<PostLikeResponseDto>> addPostLike(
             @AuthenticationParameter AuthenticationInfo authenticationInfo,
             @PathVariable long postId
@@ -32,7 +32,7 @@ public class PostLikeController {
                 .body(ApiResponse.success(postLike, "post like added successfully"));
     }
 
-    @GetMapping("/posts/{postId}/likes")
+    @GetMapping("/v1/posts/{postId}/likes")
     public ResponseEntity<ApiResponse<PostLikeResponseDto>> getPostLike(
             @AuthenticationParameter AuthenticationInfo authenticationInfo,
             @PathVariable long postId
@@ -47,7 +47,7 @@ public class PostLikeController {
                 .body(ApiResponse.success(postLike, "post like found successfully"));
     }
 
-    @DeleteMapping("/posts/{postId}/likes")
+    @DeleteMapping("/v1/posts/{postId}/likes")
     public ResponseEntity<ApiResponse<PostLikeResponseDto>> deletePostLike(
             @AuthenticationParameter AuthenticationInfo authenticationInfo,
             @PathVariable long postId
