@@ -31,3 +31,6 @@ jwt:
 file:
   upload-server: ${FILE_UPLOAD_SERVER}
   upload-dir: ${FILE_UPLOAD_DIR}
+
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS}
